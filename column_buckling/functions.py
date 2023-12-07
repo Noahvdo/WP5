@@ -1,8 +1,7 @@
 ### Column critical buckling
+
 import math
 
 
-def column_buckling_crit_stress(E, L, r, t1):
-    return (math.pi**2 * E * r * t1) / ((L - 2 * r)**2)
-
-
+def column_buckling_crit_stress(E, L, R, t1):
+    return (math.pi**2 * E * R * t1) / ((L - 2 * R) ** 2)
