@@ -1,8 +1,20 @@
 import math
 
 
+# Dependent on material:
+# poisson and E_modulus
+# Dependent on number of half-waves:
+# _lambda
+
+
 def calculate_Q(p, E, R, t1):
     return p * (R / t1) ** 2 / E
+
+
+def calculate_lambda(L, R, t1, poisson):
+    return math.sqrt(
+        12 * L**4 * (1 - poisson**2) / (math.pi**4 * R**2 * t1**2)
+    )
 
 
 def calculate_k(_lambda, L, R, t1, poisson):
