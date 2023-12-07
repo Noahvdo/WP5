@@ -11,6 +11,9 @@ def calculate_Q(p, E, R, t1):
     return p * (R / t1) ** 2 / E
 
 
+# We calculated lambda based on the partial derivative of k with respect to lambda.
+
+
 def calculate_k(L, R, t1, poisson):
     return math.sqrt(
         12 * L**4 * (1 - poisson**2) / (math.pi**4 * R**2 * t1**2)
@@ -24,10 +27,10 @@ def calculate_k(L, R, t1, poisson):
     )
 
 
-def shell_buckling_crit_stress(Q, k, E, t1, L, poisson):
+def shell_buckling_crit_stress(p, R, t1, L, poisson, E):
     return (
-        (1.983 - 0.983 * math.exp(-23.14 * Q))
-        * k
+        (1.983 - 0.983 * math.exp(-23.14 * calculate_Q(p, E, R, t1)))
+        * calculate_k(L=L, R=R, t1=t1, poisson=poisson)
         * math.pi**2
         * E
         * (t1 / L) ** 2
