@@ -26,12 +26,12 @@ def compressive_stress(F, R, t1):
 # Material properties
 material = "Aluminium 6061-T6"
 density = 2.71  # kg/m^3
-yield_strength = 276 * 10**6  # Pa
-tensile_strength = 310 * 10**6  # Pa
-shear_strength = 207 * 10**6  # Pa
-shear_modulus = 26 * 10**9  # Pa
-bulk_modulus = 70 * 10**9  # Pa
-Youngs_modulus = 23 * 10**9  # Pa
+yield_strength = 276e6  # Pa
+tensile_strength = 310e6  # Pa
+shear_strength = 207e6  # Pa
+shear_modulus = 26e9  # Pa
+bulk_modulus = 70e9  # Pa
+Youngs_modulus = 23e9  # Pa
 poisson = 0.33  # unitless
 
 L = min(1.63, max(L, 2 * R))  # minimum length is 2R, maximum length is 143m
