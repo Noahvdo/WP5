@@ -1,8 +1,9 @@
 import math
 
 
-def get_mass(density, R, L, t1):
-    return (
-        ((R + t1) ** 2 - R**2) * math.pi * L
-        + ((4 / 3) * math.pi * ((R + t1) ** 3 - (R) ** 3))
-    ) * density
+# Calculation of the mass of the vessel
+def get_mass(density, R, L, t1, t2):
+    return density * (
+        ((R) ** 2 - (R - t1) ** 2) * math.pi * L
+        + ((4 / 3) * math.pi * ((R) ** 3 - (R - t2) ** 3))
+    )

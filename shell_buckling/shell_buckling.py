@@ -12,6 +12,7 @@ def calculate_Q(p, E, R, t1):
 
 
 # We calculated lambda based on the partial derivative of k with respect to lambda.
+# This was: sqrt(12 * L**4 * (1 - poisson**2) / (pi**4 * R**2 * t1**2))
 
 
 def calculate_k(L, R, t1, poisson):
