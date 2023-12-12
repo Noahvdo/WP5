@@ -7,7 +7,7 @@ from vessel_pressure.vessel_pressure import hoop_stress
 from colorama import Fore, Style
 
 
-L = 163  # m
+L = 1.63  # m
 R = 0.252  # m
 t1 = 0.01  # m
 t2 = 0.01  # m
