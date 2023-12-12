@@ -21,7 +21,7 @@ def compressive_stress(F, R, t1):
 
 # Material properties
 material = "Aluminium 6061-T6"
-density = 2.7  # kg/m^3
+density = 2.71  # kg/m^3
 yield_strength = 276 * 10**6  # Pa
 tensile_strength = 310 * 10**6  # Pa
 shear_strength = 207 * 10**6  # Pa
