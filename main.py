@@ -4,6 +4,8 @@ from column_buckling.functions import column_buckling_crit_stress
 from shell_buckling.functions import shell_buckling_crit_stress
 from mass.functions import get_mass
 from vessel_pressure.functions import hoop_stress
+from colorama import Fore, Style
+
 
 E = 10  # GPa
 poisson = 0.9  # -
@@ -27,24 +29,24 @@ hoop_stress = hoop_stress(p, t1, R)
 fails = False
 
 if hoop_stress > material_yield_strength:
-    print("[-] Fails under hoop tension stress")
+    print("[" + Fore.RED + "-" + Style.RESET_ALL + "] Fails under hoop tension stress")
     fails = True
 else:
-    print("[+] Hoop stress succeeds.")
+    print("[" + Fore.GREEN + "+" + Style.RESET_ALL + "] Hoop stress succeeds.")
 if stress_applied > column_buckling_crit:
-    print("[-] Fails under column buckling")
+    print("[" + Fore.RED + "-" + Style.RESET_ALL + "] Fails under column buckling")
     fails = True
 else:
-    print("[+] Column buckling succeeds.")
+    print("[" + Fore.GREEN + "+" + Style.RESET_ALL + "] Column buckling succeeds.")
 
 if stress_applied > shell_buckling_crit:
-    print("[-] Fails under shell buckling")
+    print("[" + Fore.RED + "-" + Style.RESET_ALL + "] Fails under shell buckling")
     fails = True
 else:
-    print("[+] Shell buckling succeeds.")
+    print("[" + Fore.GREEN + "+" + Style.RESET_ALL + "] Shell buckling succeeds.")
 
 if fails:
-    print("[-] Fuel tank calculations unsuccessful")
+    print(Fore.RED + "Fuel tank calculations unsuccessful" + Style.RESET_ALL)
     exit()
 
-print("[+] Fuel tank calculations successful")
+print(Fore.GREEN + "Fuel tank calculations successful" + Style.RESET_ALL)
