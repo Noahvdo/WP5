@@ -2,17 +2,21 @@
 import math
 from column_buckling.column_buckling import column_buckling_crit_stress
 from shell_buckling.shell_buckling import shell_buckling_crit_stress
-from mass.mass import get_mass
+from mass.mass import get_mass, get_fuel_volume
 from vessel_pressure.vessel_pressure import hoop_stress
 from colorama import Fore, Style
 
 
 L = 1.63  # m
-R = 0.252  # m
+R = 0.2407  # m
+R_with_margin = 0.3906  # m
 t1 = 0.01  # m
 t2 = 0.01  # m
-V = 0.3906  # m^3
-p = 100  # Pa
+minimum_volume = 0.3906  # m^3
+p = 22.8e5  # Pa
+
+
+# minimum_volume = 0.3550999091  # m^3
 
 
 def compressive_stress(F, R, t1):
@@ -30,7 +34,7 @@ bulk_modulus = 70 * 10**9  # Pa
 Youngs_modulus = 23 * 10**9  # Pa
 poisson = 0.33  # unitless
 
-L = min(143, max(L, 2 * R))  # minimum length is 2R, maximum length is 143m
+L = min(1.63, max(L, 2 * R))  # minimum length is 2R, maximum length is 143m
 
 material_yield_strength = 30  # MPa
 
@@ -45,7 +49,7 @@ hoop_stress = hoop_stress(p, t1, R)
 
 fails = False
 
-if hoop_stress > material_yield_strength:
+if hoop_stress > yield_strength:
     print("[" + Fore.RED + "-" + Style.RESET_ALL + "] Fails under hoop tension stress")
     fails = True
 else:
@@ -63,8 +67,15 @@ if stress_applied > shell_buckling_crit:
 else:
     print("[" + Fore.GREEN + "+" + Style.RESET_ALL + "] Shell buckling succeeds.")
 
-print("Mass of the vessel is " + str(mass) + " kg")
 
+if minimum_volume > get_fuel_volume(R, L, t1, t2):
+    print("[" + Fore.RED + "-" + Style.RESET_ALL + "] Volume is too small")
+    fails = True
+else:
+    print("[" + Fore.GREEN + "+" + Style.RESET_ALL + "] Volume is sufficient")
+
+print("Fuel volume is " + str(get_fuel_volume(R, L, t1, t2)) + " m^3")
+print("Mass of the vessel is " + str(mass) + " kg")
 if fails:
     print(Fore.RED + "Fuel tank calculations unsuccessful" + Style.RESET_ALL)
     exit()
