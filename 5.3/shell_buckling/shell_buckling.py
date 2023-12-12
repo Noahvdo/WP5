@@ -16,6 +16,7 @@ def calculate_Q(p, E, R, t1):
 
 
 def calculate_k(L, R, t1, poisson):
+    L = L - 2 * R
     return math.sqrt(
         12 * L**4 * (1 - poisson**2) / (math.pi**4 * R**2 * t1**2)
     ) + 12 * L**4 * (1 - poisson**2) / (
@@ -29,6 +30,7 @@ def calculate_k(L, R, t1, poisson):
 
 
 def shell_buckling_crit_stress(p, R, t1, L, poisson, E):
+    L = L - 2 * R
     return (
         (1.983 - 0.983 * math.exp(-23.14 * calculate_Q(p, E, R, t1)))
         * calculate_k(L=L, R=R, t1=t1, poisson=poisson)
