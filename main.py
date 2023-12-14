@@ -13,6 +13,8 @@ L = min(1.63, max(L, 2 * R))  # minimum length is 2R, maximum length is 1.63 m
 t1 = 0.01  # m
 t2 = 0.01  # m
 minimum_volume = 0.2024  # m^3
+volume_margin = 0.1  # m^3
+volume = minimum_volume + minimum_volume * volume_margin  # m^3
 p = 22.8e5  # Pa
 
 gravity = 9.81  # m / s^2
@@ -37,24 +39,41 @@ bulk_modulus = 70e9  # Pa
 Youngs_modulus = 23e9  # Pa
 poisson = 0.33  # unitless
 
-
-# Get mass
-mass = get_mass(density, R, L, t1, t2)
-total_mass = mass + total_mass
-
 # Get applied force / stress
 applied_force = total_mass * acceleration  # N
-applied_stress = compressive_stress(applied_force, R, t1)
 
-# Get critical stresses
-column_buckling_crit = column_buckling_crit_stress(Youngs_modulus, L, R, t1)
-shell_buckling_crit = shell_buckling_crit_stress(p, R, t1, L, poisson, Youngs_modulus)
 
-# Get hoop stress
-hoop_stress = hoop_stress(p, t1, R)
+def calculate_failures(applied_force, R, t1, L, p, poisson, Youngs_modulus, density):
+    applied_stress = compressive_stress(applied_force, R, t1)
 
-# Get fuel volume
-fuel_volume = get_fuel_volume(R, L, t1, t2)
+    # Get critical stresses
+    column_buckling_crit = column_buckling_crit_stress(Youngs_modulus, L, R, t1)
+    shell_buckling_crit = shell_buckling_crit_stress(
+        p, R, t1, L, poisson, Youngs_modulus
+    )
+
+    if column_buckling_crit < applied_stress:
+        return False
+
+    if shell_buckling_crit < applied_stress:
+        return False
+
+    # Get hoop stress
+    hoop_stress = hoop_stress(p, t1, R)
+
+    if hoop_stress > yield_strength:
+        return False
+
+    # Get fuel volume
+    fuel_volume = get_fuel_volume(R, L, t1, t2)
+
+    if minimum_volume > fuel_volume:
+        return False
+
+    # Get mass
+    mass = get_mass(density, R, L, t1, t2)
+
+    return True
 
 
 def print_results():
