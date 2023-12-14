@@ -1,15 +1,15 @@
 # This is the main file where the main code is run.
 import math
-from column_buckling.column_buckling import column_buckling_crit_stress
-from shell_buckling.shell_buckling import shell_buckling_crit_stress
-from mass.mass import get_mass, get_fuel_volume
-from vessel_pressure.vessel_pressure import hoop_stress
+from launch_loads.column_buckling.column_buckling import column_buckling_crit_stress
+from launch_loads.shell_buckling.shell_buckling import shell_buckling_crit_stress
+from launch_loads.mass.mass import get_mass, get_fuel_volume
+from launch_loads.vessel_pressure.vessel_pressure import hoop_stress
 from colorama import Fore, Style
 
 
 L = 1.63  # m
-L = min(1.63, max(L, 2 * R))  # minimum length is 2R, maximum length is 1.63 m
 R = 0.208  # m
+L = min(1.63, max(L, 2 * R))  # minimum length is 2R, maximum length is 1.63 m
 t1 = 0.01  # m
 t2 = 0.01  # m
 minimum_volume = 0.2024  # m^3
