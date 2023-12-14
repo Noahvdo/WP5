@@ -20,8 +20,8 @@ t_min = 0.001  # m
 t_max = 0.03  # m
 
 
-minimum_volume = 0.2024  # m^3
-volume_margin = 0.1  # m^3
+minimum_volume = 0.19286  # m^3
+volume_margin = 0.05  # m^3
 volume = minimum_volume + minimum_volume * volume_margin  # m^3
 p = 24e5  # Pa
 
@@ -38,7 +38,7 @@ def compressive_stress(F, R, t1):
 
 # Material properties
 material = "Aluminium 6061-T6"
-density = 2.71  # kg/m^3
+density = 2710  # kg/m^3
 yield_strength = 276e6  # Pa
 tensile_strength = 310e6  # Pa
 shear_strength = 207e6  # Pa
@@ -51,34 +51,34 @@ poisson = 0.33  # unitless
 applied_force = total_mass * acceleration  # N
 
 
-def calculate_failures(applied_force, R, t1, L, p, poisson, Youngs_modulus, density):
-    applied_stress = compressive_stress(applied_force, R, t1)
+def calculate_failures(applied_force, R, t, L, p, poisson, Youngs_modulus, density):
+    applied_stress = compressive_stress(applied_force, R, t)
 
     # Get critical stresses
-    column_buckling_crit = column_buckling_crit_stress(Youngs_modulus, L, R, t1)
+    column_buckling_crit = column_buckling_crit_stress(Youngs_modulus, L, R, t)
     shell_buckling_crit = shell_buckling_crit_stress(
-        p, R, t1, L, poisson, Youngs_modulus
+        p, R, t, L, poisson, Youngs_modulus
     )
 
     if column_buckling_crit < applied_stress:
-        return False
+        return False, 0, 0, 0, 0
 
     if shell_buckling_crit < applied_stress:
-        return False
+        return False, 0, 0, 0, 0
 
     # Get hoop stress
-    hoop_stress = hoop_stress(p, t1, R)
+    hoop_stress_value = hoop_stress(p, t, R)
 
-    if hoop_stress > yield_strength:
-        return False
+    if hoop_stress_value > yield_strength:
+        return False, 0, 0, 0, 0
 
-    # Get fuel volume
-    fuel_volume = get_fuel_volume(R, L, t1, t2)
-
-    if minimum_volume > fuel_volume:
-        return False
-
-    return True
+    return (
+        True,
+        applied_stress,
+        hoop_stress_value,
+        column_buckling_crit,
+        shell_buckling_crit,
+    )
 
 
 final_R = 0
@@ -87,31 +87,43 @@ final_L = 0
 final_volume = 0
 final_margin_volume = 0
 previous_mass = 999999999
+final_shell = 0
+final_column = 0
+final_hoop = 0
+final_stress = 0
 
 
 for L in np.linspace(L_min, L_max, 100):
     for t in np.linspace(t_min, t_max, 100):
         calculated_R, fuel_volume = find_r_for_volume(volume, L, t, R)
-        failure = calculate_failures(
-            applied_force, calculated_R, t1, L, p, poisson, Youngs_modulus, density
+        success, stress, hoop_stresss, column, shell = calculate_failures(
+            applied_force, calculated_R, t, L, p, poisson, Youngs_modulus, density
         )
-        if failure:
+        if not success:
             continue
 
-        margin_volume = (fuel_volume - minimum) / minimum_volume
+        if fuel_volume < volume:
+            continue
+
+        margin_volume = (fuel_volume - minimum_volume) / minimum_volume
         # Get mass
-        mass = get_mass(density, R, L, t)
+        mass, tank_volume = get_mass(density, calculated_R, L, t)
 
         if 2 * calculated_R > L:
             continue
 
-        if mass < previous_mass:
+        if mass < previous_mass and mass > 0:
             previous_mass = mass
-            final_R = R
+            final_R = calculated_R
             final_t = t
             final_L = L
-            final_volume = fuel_volume
+            final_fuel_volume = fuel_volume
             final_margin_volume = margin_volume
+            final_shell = shell
+            final_column = column
+            final_hoop = hoop_stresss
+            final_stress = stress
+            final_volume = tank_volume
 
 
 def save_final_values():
@@ -125,10 +137,20 @@ def save_final_values():
             + str(final_L)
             + "\nVolume: "
             + str(final_volume)
+            + "\nFuel Volume: "
+            + str(final_fuel_volume)
             + "\nMargin Volume: "
             + str(final_margin_volume)
             + "\nMass: "
             + str(previous_mass)
+            + "\nShell: "
+            + str(final_shell)
+            + "\nColumn: "
+            + str(final_column)
+            + "\nHoop: "
+            + str(final_hoop)
+            + "\nStress: "
+            + str(final_stress)
         )
 
 

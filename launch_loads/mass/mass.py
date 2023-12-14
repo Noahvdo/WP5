@@ -17,15 +17,17 @@ def get_fuel_volume(R, L, t):
 def find_r_for_volume(volume, L, t, R):
     found_value = False
     while not found_value:
+        if 2 * R > L:
+            return 0, 0
         fuel_volume = get_fuel_volume(R, L, t)
         if fuel_volume >= volume:
             found_value = True
         else:
-            R += 0.00001
+            R += 0.001
     return R, fuel_volume
 
 
 # Calculation of the mass of the vessel
 def get_mass(density, R, L, t):
     volume = get_volume(R, L, t)
-    return round(density * volume, 5)
+    return round(density * volume, 5), volume
