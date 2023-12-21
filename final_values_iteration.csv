@@ -1,0 +1,20 @@
+R	0.245
+t	0.798
+L	1.2533
+Volume	0.0015
+Fuel Volume	0.20401
+Margin Volume	5.7814
+Mass	6.8049
+Shell	57902550.8442	Margin	12.9207
+Column stress	376852615.0468	Margin	634.9322
+Hoop stress	736860759.4937	Margin	19.4255
+Applied stress	51277194.8446
+Material	Ti6Al4V
+
+Attachments:
+Vertical attachment thickness	0.0005	(m)
+Horizontal attachment thickness	0.0005	(m)
+Horizontal attachment length	0.01	(m)
+Attachment mass	3.1440066156884994	(kg)
+Vertical attachment mass	1.4760409181742618	(kg)
+Horizontal attachment mass	0.047981194834993975

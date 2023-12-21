@@ -1,11 +1,12 @@
-R: 0.21600000000000016
-t: 0.0018787878787878787
-L: 1.5615151515151515
-Volume: 0.003959520515062517
-Fuel Volume: 0.20381
-Margin Volume: 0.056776936637975665
-Mass: 10.7303
-Shell: 92528147.91083115
-Column: 72206278.18032953
-Hoop: 275922580.6451615
-Stress: 23983954.65717085
+R: 0.247 (m)
+t: 0.798 (mm)
+L: 1.2305 (m)
+Volume: 0.0015 (m^3)
+Fuel Volume: 0.20276 (m^3)
+Margin Volume: 513.33 (%)
+Mass: 6.7355 (kg)
+Shell: 48562407.0194 (Pa). Margin: 6.365 (%)
+Column stress: 408112031.8967 (Pa). Margin: 793.8776 (%)
+Hoop stress: 742875949.3671(Pa). Margin: 18.4585 (%)
+Applied stress: 45656364.3392 (Pa)
+Material: Ti6Al4V
